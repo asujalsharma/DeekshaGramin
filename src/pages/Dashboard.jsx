@@ -175,13 +175,13 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 pb-12 min-w-screen">
       {/* ---------------- MULTI-ITEM CAROUSEL ---------------- */}
       {/* DESKTOP GRID (hidden on mobile) */}
-      <div className="hidden sm:grid max-w-6xl mx-auto px-4 mt-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="hidden sm:grid max-w-7xl mx-auto px-1 mt-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1">
         {banners.map((src, i) => (
           <img
             key={i}
             src={src}
             alt={`banner-${i}`}
-            className="w-full h-56 sm:h-64 md:h-72 object-cover rounded-xl shadow"
+            className="w-full h-[450px] object-cover rounded-xl shadow"
           />
         ))}
       </div>
