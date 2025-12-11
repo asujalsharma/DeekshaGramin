@@ -1,31 +1,37 @@
 // src/App.jsx
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-import PageA from "./pages/about"; // <- ensure this file exists
-import PageB from "./pages/PageB";
+import PageA from "./pages/about";
+import PageB from "./pages/ContactUs";
+
 import ProtectedRoute from "./auth/ProtectedRoute";
-import AppNav from "./components/AppNav";
+import Layout from "./components/Layout"; // renders AppNav + Outlet
 
 export default function App() {
   return (
-    <div className="app-root">
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+    <Routes>
+      {/* Use Layout for everything so navbar is always visible */}
+      <Route path="/" element={<Layout />}>
+        {/* default landing */}
+        <Route index element={<Navigate to="/dashboard" replace />} />
 
-        <Route path="/app" element={<ProtectedRoute />}>
-          <Route element={<AppNav />}>
-            <Route index element={<Dashboard />} />
-            <Route path="about" element={<PageA />} />
-            <Route path="contact" element={<PageB />} />
-          </Route>
-        </Route>
+        {/* public */}
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="app/about" element={<PageA />} />
+        <Route path="app/contact" element={<PageB />} />
 
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </div>
+        {/* protected sub-routes */}
+        <Route element={<ProtectedRoute />}></Route>
+
+        {/* fallback */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Route>
+    </Routes>
   );
 }

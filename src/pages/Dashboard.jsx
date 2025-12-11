@@ -172,92 +172,50 @@ export default function Dashboard() {
   const translatePercent = index * itemWidthPercent; // shift by item width each step
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-gray-50 pb-12 min-w-screen">
       {/* ---------------- MULTI-ITEM CAROUSEL ---------------- */}
-      <div
-        className="max-w-6xl mx-auto px-4 mt-8 select-none h-auto"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
-        <div className="relative">
-          <div className="overflow-hidden rounded-xl shadow-lg bg-white">
-            <div
-              className="flex transition-transform duration-700 ease-in-out"
-              style={{
-                width: `${containerWidthPercent}%`,
-                transform: `translateX(-${translatePercent}%)`,
-              }}
-            >
-              {banners.map((src, i) => (
-                <div
-                  key={i}
-                  style={{ width: `${itemWidthPercent}%` }}
-                  className="flex-shrink-0"
-                >
-                  <img
-                    src={src}
-                    alt={`banner-${i}`}
-                    className="h-56 sm:h-56 md:h-72 lg:h-96 w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* DESKTOP GRID (hidden on mobile) */}
+      <div className="hidden sm:grid max-w-6xl mx-auto px-4 mt-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {banners.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt={`banner-${i}`}
+            className="w-full h-56 sm:h-64 md:h-72 object-cover rounded-xl shadow"
+          />
+        ))}
+      </div>
 
-          {/* left/right arrows */}
-          <button
-            onClick={prev}
-            aria-label="Previous"
-            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
-          >
-            <svg
-              className="w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 18l-6-6 6-6"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={next}
-            aria-label="Next"
-            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow"
-          >
-            <svg
-              className="w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 18l6-6-6-6"
-              />
-            </svg>
-          </button>
+      {/* MOBILE CAROUSEL (only visible on small screens) */}
+      <div className="sm:hidden max-w-full overflow-hidden relative mt-6">
+        <div
+          className="flex transition-transform duration-500 ease-in-out gap-4"
+          style={{
+            width: `${banners.length * 100}%`,
+            transform: `translateX(-${index * (105 / banners.length)}%)`,
+          }}
+        >
+          {banners.map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt={`slide-${i}`}
+              className="w-full h-[450px] object-cover rounded-xl"
+            />
+          ))}
+        </div>
 
-          {/* simple dots showing position relative to number of banners */}
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-3 flex gap-2">
-            {banners.map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => goTo(i)}
-                className={`w-2 h-2 rounded-full ${
-                  i === index ? "bg-white" : "bg-white/60"
-                } shadow`}
-              />
-            ))}
-          </div>
+        {/* MOBILE DOTS */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+          {banners.map((_, i) => (
+            <button
+              key={i}
+              className={`w-2 h-2 rounded-full ${
+                i === index ? "bg-white" : "bg-white/50"
+              }`}
+              onClick={() => setIndex(i)}
+            />
+          ))}
         </div>
       </div>
 

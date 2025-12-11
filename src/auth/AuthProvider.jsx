@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
 
-export function useAuth() {
+export function useAuth() { 
   return useContext(AuthContext);
 }
 
