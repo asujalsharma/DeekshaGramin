@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3000/api/userAuth";
+const API_BASE_URL = "https://gramin-solar-backend.vercel.app/api/userAuth";
 
 /**
  * Auth Service
