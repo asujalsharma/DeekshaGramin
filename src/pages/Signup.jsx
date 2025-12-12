@@ -140,13 +140,16 @@ export default function Signup() {
           panCard: pan.trim().toUpperCase(),
         };
 
-        const res = await fetch("https://gramin-solar-backend.vercel.app/api/venderAuth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
+        const res = await fetch(
+          "https://graminsolarbackend.onrender.com/api/venderAuth/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
 
         const data = await res.json();
         if (!res.ok) {
@@ -169,13 +172,16 @@ export default function Signup() {
           pan: pan.trim().toUpperCase() || undefined,
         };
 
-        const res = await fetch(`https://gramin-solar-backend.vercel.app/api/userAuth/signup`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
+        const res = await fetch(
+          `https://graminsolarbackend.onrender.com/api/userAuth/signup`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
 
         const data = await res.json();
         if (!res.ok) {
