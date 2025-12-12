@@ -1,6 +1,7 @@
 // src/pages/PlanDetails.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
+import useRazorpay from "../hooks/useRazorpay";
 
 /**
  * PlanDetails page
@@ -23,9 +24,51 @@ export default function PlanDetails() {
   // plan can be passed via link state to avoid refetching
   const initialPlan = location.state?.plan || null;
 
+
   const [plan, setPlan] = useState(initialPlan);
   const [loading, setLoading] = useState(!initialPlan);
   const [error, setError] = useState("");
+
+  // Razorpay hook for payment
+  const { initiatePayment, loading: paymentLoading, scriptLoaded } = useRazorpay({
+    amount: plan?.downpayment || 0,
+    description: `Down Payment for ${plan?.Title || 'Solar Plan'}`,
+    prefill: {
+      name: "", // Can be filled from user context/auth
+      email: "",
+      contact: "",
+    },
+    notes: {
+      plan_id: plan?.id || "",
+      plan_title: plan?.Title || "",
+      payment_type: "downpayment",
+    },
+    onSuccess: (response) => {
+      alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+      // You can navigate to a success page or show order confirmation
+      navigate("/app", {
+        state: {
+          orderCompleted: true,
+          paymentId: response.razorpay_payment_id,
+          plan: plan,
+        },
+      });
+    },
+    onFailure: (error) => {
+      alert("Payment failed: " + (error.description || "Please try again"));
+    },
+    onDismiss: () => {
+      console.log("Payment cancelled by user");
+    },
+  });
+
+  const handleBuyNow = () => {
+    if (!plan) {
+      alert("Plan information not available");
+      return;
+    }
+    initiatePayment();
+  };
 
   // Mock loader — replace with your API call if needed
   useEffect(() => {
@@ -192,21 +235,36 @@ export default function PlanDetails() {
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-2">
-                <button
+                {/* <button
                   onClick={handleEnquire}
                   className="col-span-2 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
                 >
                   Enquire about this plan
-                </button>
+                </button> */}
 
                 <button
-                  onClick={() => {
-                    // quick checkout flow placeholder — replace with your flow
-                    alert("Start checkout (implement flow)");
-                  }}
-                  className="w-full border border-gray-200 rounded-lg py-2 hover:bg-gray-50"
+                  onClick={handleBuyNow}
+                  disabled={paymentLoading || !scriptLoaded}
+                  className="w-full border bg-blue-700 border-gray-200 rounded-lg py-2 hover:bg-blue-800 text-white transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Buy now
+                  {paymentLoading ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </>
+                  ) : !scriptLoaded ? (
+                    "Loading..."
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      Buy now
+                    </>
+                  )}
                 </button>
               </div>
             </div>

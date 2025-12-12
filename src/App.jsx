@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import PageA from "./pages/about";
 import PageB from "./pages/ContactUs";
 import Enquiry from "./pages/Enquiry";
+import AdminPanel from "./pages/AdminPanel";
+import VendorPayment from "./pages/VendorPayment";
 
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Layout from "./components/Layout"; // renders AppNav + Outlet
@@ -24,6 +26,8 @@ export default function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
+        <Route path="vendor-payment" element={<VendorPayment />} />
+        <Route path="admin" element={<AdminPanel />} />
         <Route path="app/about" element={<PageA />} />
         <Route path="app/contact" element={<PageB />} />
 
