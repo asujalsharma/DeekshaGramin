@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { authService } from '../services/authService';
 
 const AuthContext = createContext(null);
 
@@ -6,38 +7,118 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-// Simple mock auth: store user in localStorage
+// Auth provider with real API integration
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) setUser(JSON.parse(stored));
+    // Check if user is already logged in (from localStorage)
+    const storedUser = authService.getCurrentUser();
+    if (storedUser) {
+      setUser(storedUser);
+    }
     setLoading(false);
   }, []);
 
-  const signup = ({ name, email, password }) => {
-    // In a real app call backend. Here we just save locally.
-    const newUser = { name, email };
-    localStorage.setItem("user", JSON.stringify(newUser));
-    setUser(newUser);
-    return Promise.resolve(newUser);
+  /**
+   * Signup new user
+   * @param {Object} userData - User registration data
+   * @returns {Promise<Object>} User data
+   */
+  const signup = async (userData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await authService.signup(userData);
+      
+      if (response.user) {
+        setUser(response.user);
+      }
+      
+      setLoading(false);
+      return response;
+    } catch (err) {
+      setError(err.message || 'Signup failed');
+      setLoading(false);
+      throw err;
+    }
   };
 
-  const login = ({ email, password }) => {
-    // Mock: accept any credentials and return a user based on email
-    const existing = { name: email.split("@")[0], email };
-    localStorage.setItem("user", JSON.stringify(existing));
-    setUser(existing);
-    return Promise.resolve(existing);
+  /**
+   * Login user
+   * @param {Object} credentials - Login credentials
+   * @returns {Promise<Object>} User data
+   */
+  const login = async (credentials) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await authService.login(credentials);
+      
+      if (response.user) {
+        setUser(response.user);
+      }
+      
+      setLoading(false);
+      return response;
+    } catch (err) {
+      setError(err.message || 'Login failed');
+      setLoading(false);
+      throw err;
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+  /**
+   * Logout user
+   */
+  const logout = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      await authService.logout();
+      
+      setUser(null);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message || 'Logout failed');
+      setUser(null); // Clear user even if API fails
+      setLoading(false);
+      console.error('Logout error:', err);
+    }
   };
 
-  const value = { user, signup, login, logout, loading };
+  /**
+   * Update user data
+   * @param {Object} userData - Updated user data
+   */
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
+  /**
+   * Clear error
+   */
+  const clearError = () => {
+    setError(null);
+  };
+
+  const value = { 
+    user, 
+    signup, 
+    login, 
+    logout, 
+    loading,
+    error,
+    updateUser,
+    clearError,
+    isAuthenticated: !!user,
+  };
+  
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
