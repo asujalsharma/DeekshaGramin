@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import PageA from "./pages/about";
 import PageB from "./pages/ContactUs";
+import Enquiry from "./pages/Enquiry";
 
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Layout from "./components/Layout"; // renders AppNav + Outlet
@@ -27,8 +28,9 @@ export default function App() {
         <Route path="app/contact" element={<PageB />} />
 
         {/* protected sub-routes */}
-        <Route element={<ProtectedRoute />}></Route>
-
+        <Route element={<ProtectedRoute />}>
+          <Route path="app/1-KVA" element={<Enquiry />} />
+        </Route>
         {/* fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>

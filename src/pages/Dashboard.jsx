@@ -1,11 +1,12 @@
 // src/pages/Dashboard.jsx
 import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 /**
  * Dashboard with:
  * - Top carousel that displays multiple images at once (responsive: 1/2/3/4)
- * - Product cards (uses list image as the detailed spec sheet)
- * - Modal to view the list image (detailed shopping list / specs)
+ * - Product cards linking to /plan/:id and passing plan in location.state
+ * - Enquire button sends the plan to /app/1-KVA via navigate(state)
  *
  * Put your images in public/solar/ as in your original file names.
  */
@@ -19,94 +20,82 @@ const banners = [
 
 const listImage = "/solar/list.jpg"; // used for product detail modal
 
+// products now contain canonical id/slug and numeric price/subsidy/downpayment
 const products = [
   {
-    id: 1,
-    title: "2KVA / 24V",
-    panels: "4 pc 550W Bifacial",
-    batteries: "2 pc 200Ah (5yrs)",
-    price: "₹1,01,034",
+    id: "1-kva",
+    Title: "1 KVA",
+    price: 43576,
+    PriceText: "₹ 43,576",
+    downpayment: 10000,
+    subsidy: 5000,
+    warrantyYears: 3,
+    panels: "2 x 300W panels",
+    batteries: "1 x 12V battery",
+    banner: "/solar/banner1.jpeg",
+    bullets: [
+      "Monocrystalline panels",
+      "Installation included",
+      "Free site survey",
+    ],
   },
   {
-    id: 2,
-    title: "2KVA / 24V",
-    panels: "4 pc 550W Topcon",
-    batteries: "2 pc 200Ah (5yrs)",
-    price: "₹1,05,226",
+    id: "2-kva",
+    Title: "2 KVA",
+    price: 83976,
+    PriceText: "₹ 83,976",
+    downpayment: 20000,
+    subsidy: 8000,
+    warrantyYears: 3,
+    panels: "4 x 300W panels",
+    batteries: "2 x 12V batteries",
+    banner: "/solar/banner2.jpeg",
+    bullets: ["Higher output", "5-year performance guarantee"],
   },
   {
-    id: 3,
-    title: "5KVA / 48V",
-    panels: "9 pc 550W Bifacial",
-    batteries: "4 pc 200Ah (5yrs)",
-    price: "₹2,16,764",
+    id: "3-kva",
+    Title: "3 KVA",
+    price: 115000,
+    PriceText: "₹ 1,15,000",
+    downpayment: 25000,
+    subsidy: 10000,
+    warrantyYears: 3,
+    panels: "6 x 300W panels",
+    batteries: "2 x 24V batteries",
+    banner: "/solar/banner3.jpeg",
+    bullets: ["Commercial grade inverter", "Priority installation"],
   },
   {
-    id: 4,
-    title: "5KVA / 48V",
-    panels: "9 pc 550W Topcon",
-    batteries: "4 pc 200Ah (5yrs)",
-    price: "₹2,26,196",
+    id: "5-kva",
+    Title: "5 KVA",
+    price: 195594,
+    PriceText: "₹ 1,95,594",
+    downpayment: 40000,
+    subsidy: 15000,
+    warrantyYears: 3,
+    panels: "10 x 300W panels",
+    batteries: "4 x 24V batteries",
+    banner: "/solar/banner4.jpeg",
+    bullets: ["Hybrid-ready", "Extended support"],
   },
   {
-    id: 5,
-    title: "10KVA / 120V",
-    panels: "18 pc 550W Bifacial",
-    batteries: "10 pc 200Ah (5yrs)",
-    price: "₹4,56,767",
-  },
-  {
-    id: 6,
-    title: "10KVA / 120V",
-    panels: "18 pc 550W Topcon",
-    batteries: "10 pc 200Ah (5yrs)",
-    price: "₹4,75,633",
-  },
-  {
-    id: 7,
-    title: "3024 Bullet",
-    panels: "4 pc 550W Monoperc",
-    batteries: "2 pc 200Ah",
-    price: "₹92,982",
-  },
-  {
-    id: 8,
-    title: "3024 Bullet",
-    panels: "4 pc 590W Topcon",
-    batteries: "2 pc 200Ah",
-    price: "₹99,938",
-  },
-  {
-    id: 9,
-    title: "5KVA / 48V",
-    panels: "9 pc 550W Monoperc",
-    batteries: "4 pc 200Ah",
-    price: "₹2,15,594",
-  },
-  {
-    id: 10,
-    title: "5KVA / 48V",
-    panels: "9 pc 590W Topcon",
-    batteries: "4 pc 200Ah",
-    price: "₹2,25,789",
-  },
-  {
-    id: 11,
-    title: "10KVA / 120V",
-    panels: "18 pc 550W Monoperc",
-    batteries: "10 pc 200Ah",
-    price: "₹4,08,925",
-  },
-  {
-    id: 12,
-    title: "10KVA / 120V",
-    panels: "18 pc 590W Topcon",
-    batteries: "10 pc 200Ah",
-    price: "₹4,40,252",
+    id: "10-kva",
+    Title: "10 KVA",
+    price: 297825,
+    PriceText: "₹ 2,97,825",
+    downpayment: 60000,
+    subsidy: 25000,
+    warrantyYears: 3,
+    panels: "20 x 300W panels",
+    batteries: "8 x 24V batteries",
+    banner: "/solar/banner1.jpeg",
+    bullets: ["Industrial scale", "Custom install"],
   },
 ];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   // carousel state
   const [index, setIndex] = useState(0); // current shift in items (0..banners.length-1)
   const [paused, setPaused] = useState(false);
@@ -164,17 +153,23 @@ export default function Dashboard() {
     setModalOpen(true);
   };
 
+  // Helper: navigate to plan details and pass plan in state
+  const openPlan = (plan) => {
+    navigate(`/plan/${plan.id}`, { state: { plan } });
+  };
+
+  // Helper: enquire (navigate to your Enquiry route and pass plan)
+  const enquirePlan = (plan) => {
+    navigate("/app/1-KVA", { state: { plan } });
+  };
+
   // calculate widths for multi-show sliding
   const visibleCount = Math.min(visible, banners.length);
   const itemWidthPercent = 100 / visibleCount; // each visible item width within viewport
-  // container needs to be banners.length * itemWidthPercent percent wide
-  const containerWidthPercent = banners.length * itemWidthPercent;
-  const translatePercent = index * itemWidthPercent; // shift by item width each step
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12 min-w-screen">
       {/* ---------------- MULTI-ITEM CAROUSEL ---------------- */}
-      {/* DESKTOP GRID (hidden on mobile) */}
       <div className="hidden sm:grid max-w-7xl mx-auto px-1 mt-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1">
         {banners.map((src, i) => (
           <img
@@ -187,12 +182,16 @@ export default function Dashboard() {
       </div>
 
       {/* MOBILE CAROUSEL (only visible on small screens) */}
-      <div className="sm:hidden max-w-full overflow-hidden relative mt-6">
+      <div
+        className="sm:hidden max-w-full overflow-hidden relative mt-6"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
         <div
           className="flex transition-transform duration-500 ease-in-out gap-4"
           style={{
             width: `${banners.length * 100}%`,
-            transform: `translateX(-${index * (105 / banners.length)}%)`,
+            transform: `translateX(-${(index * 100) / banners.length}%)`,
           }}
         >
           {banners.map((src, i) => (
@@ -222,10 +221,11 @@ export default function Dashboard() {
       {/* ---------------- INTRO ---------------- */}
       <div className="max-w-6xl mx-auto px-4 mt-6">
         <div className="bg-white rounded-xl p-5 shadow-sm">
-          <h1 className="text-2xl font-semibold">Welcome to your Dashboard</h1>
+          <h1 className="text-2xl font-semibold">
+            Welcome to Deeksha Gramin Solar
+          </h1>
           <p className="text-gray-600 mt-1">
-            Explore recommended solar installation packages below. Click{" "}
-            <strong>View details</strong> to see the full specification sheet.
+            Explore recommended solar installation packages below.
           </p>
         </div>
       </div>
@@ -240,13 +240,13 @@ export default function Dashboard() {
             <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
               <img
                 src={listImage}
-                alt={`${p.title} preview`}
+                alt={`${p.Title} preview`}
                 className="object-cover w-full h-full"
               />
             </div>
 
             <div className="p-4 flex-1 flex flex-col">
-              <h3 className="text-lg font-semibold">{p.title}</h3>
+              <h3 className="text-lg font-semibold">{p.Title}</h3>
               <p className="text-sm text-gray-500 mt-1">
                 {p.panels} · {p.batteries}
               </p>
@@ -254,7 +254,7 @@ export default function Dashboard() {
               <div className="mt-3 flex items-center justify-between">
                 <div>
                   <div className="text-xl font-bold text-green-600">
-                    {p.price}
+                    {p.PriceText}
                   </div>
                   <div className="text-xs text-gray-400">
                     One-time cost (est.)
@@ -262,14 +262,10 @@ export default function Dashboard() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  {/* <button
-                    onClick={() => openDetails(p)}
-                    className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
-                  >
-                    View details
-                  </button> */}
+                  {/* View details (navigates to PlanDetails and passes plan in state) */}
+                  {/* Enquire (navigates to Enquiry and passes plan state) */}
                   <button
-                    onClick={() => alert(`Enquiry placed for ${p.title}`)}
+                    onClick={() => enquirePlan(p)}
                     className="px-3 py-2 border rounded-md text-sm hover:bg-gray-50"
                   >
                     Enquire
@@ -320,7 +316,7 @@ export default function Dashboard() {
           >
             <div className="flex items-center justify-between p-4 border-b">
               <h3 className="font-semibold">
-                {modalProduct?.title || "Details"}
+                {modalProduct?.Title || "Details"}
               </h3>
               <button
                 onClick={() => setModalOpen(false)}

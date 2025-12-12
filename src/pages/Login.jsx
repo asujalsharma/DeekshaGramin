@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthProvider"; // adjust path if needed
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 
 export default function Login() {
-  const { login } = useAuth(); // expects a login({ email, password }) -> Promise
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // The page user was trying to access before login
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +21,6 @@ export default function Login() {
     setError("");
     setLoading(true);
 
-    // minimal client-side validation
     if (!email || !password) {
       setError("Please enter both email and password.");
       setLoading(false);
@@ -25,19 +28,16 @@ export default function Login() {
     }
 
     try {
-      await login({ email, password }); // your AuthProvider should resolve on success
-      navigate("/app"); // protected area root
+      await login({ email, password });
+
+      // Redirect to the originally requested page
+      navigate(from, { replace: true });
     } catch (err) {
-      // show friendly message; err may be string or Error
-      setError(err?.message || "Login failed. Please check your credentials.");
+      setError(err?.message || "Login failed.");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
