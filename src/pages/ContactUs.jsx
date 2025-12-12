@@ -40,10 +40,8 @@ export default function Contact() {
               Address
             </h3>
             <p className="text-gray-600 text-sm">
-              D 284 First floor Near iskcon temple sant nagar East of Kailash
-              110065
+              New Delhi,India
             </p>
-            <p className="text-gray-500 text-xs mt-1">(Demo address)</p>
           </div>
         </div>
 

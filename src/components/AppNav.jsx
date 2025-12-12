@@ -49,7 +49,7 @@ export default function AppNav() {
         <div className="ml-auto hidden md:flex items-center gap-3">
           {user ? (
             <>
-              <span className="text-sm">Hi, {user?.name}</span>
+              <span className="text-sm">Hi, {user?.fullname}</span>
               <button
                 onClick={handleLogout}
                 className="text-sm text-red-500 hover:text-red-700"

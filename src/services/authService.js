@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://gramin-solar-backend-dr7q.vercel.app/api/userAuth';
+const API_BASE_URL = "http://localhost:3000/api/userAuth";
 
 /**
  * Auth Service
@@ -14,9 +14,9 @@ export const authService = {
   signup: async (userData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/signup`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
@@ -24,17 +24,17 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Signup failed');
+        throw new Error(data.message || "Signup failed");
       }
 
       // Store token if provided
       if (data.token) {
-        localStorage.setItem('authToken', data.token);
+        localStorage.setItem("authToken", data.token);
       }
 
       return data;
     } catch (error) {
-      console.error('Signup error:', error);
+      console.error("Signup error:", error);
       throw error;
     }
   },
@@ -45,34 +45,36 @@ export const authService = {
    * @returns {Promise<Object>} Response with user data and token
    */
   login: async (credentials) => {
+    console.log(credentials);
     try {
       const response = await fetch(`${API_BASE_URL}/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(credentials),
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || "Login failed");
       }
 
       // Store token if provided
       if (data.token) {
-        localStorage.setItem('authToken', data.token);
+        localStorage.setItem("authToken", data.token);
       }
 
       // Store user data
       if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem("user", JSON.stringify(data.user));
       }
 
       return data;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       throw error;
     }
   },
@@ -83,32 +85,32 @@ export const authService = {
    */
   logout: async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      
+      const token = localStorage.getItem("authToken");
+
       const response = await fetch(`${API_BASE_URL}/logout`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
       const data = await response.json();
 
       // Clear local storage regardless of API response
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
 
       if (!response.ok) {
-        console.warn('Logout API warning:', data.message);
+        console.warn("Logout API warning:", data.message);
       }
 
       return data;
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       // Clear local storage even if API fails
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
       throw error;
     }
   },
@@ -119,10 +121,10 @@ export const authService = {
    */
   getCurrentUser: () => {
     try {
-      const userStr = localStorage.getItem('user');
+      const userStr = localStorage.getItem("user");
       return userStr ? JSON.parse(userStr) : null;
     } catch (error) {
-      console.error('Error parsing user data:', error);
+      console.error("Error parsing user data:", error);
       return null;
     }
   },
@@ -132,7 +134,7 @@ export const authService = {
    * @returns {string|null} Token or null
    */
   getToken: () => {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem("authToken");
   },
 
   /**
@@ -140,7 +142,7 @@ export const authService = {
    * @returns {boolean} Authentication status
    */
   isAuthenticated: () => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     return !!token;
   },
 
@@ -150,23 +152,23 @@ export const authService = {
    */
   verifyToken: async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      
+      const token = localStorage.getItem("authToken");
+
       if (!token) {
         return false;
       }
 
       // This endpoint might need to be implemented on backend
       const response = await fetch(`${API_BASE_URL}/verify`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       return response.ok;
     } catch (error) {
-      console.error('Token verification error:', error);
+      console.error("Token verification error:", error);
       return false;
     }
   },
