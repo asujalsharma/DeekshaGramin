@@ -27,58 +27,59 @@ export default function AdminUsers() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex justify-between items-center mb-6">
+        <div className="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 md:mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
-              <p className="text-gray-600 mt-1">Manage all registered users</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">User Management</h1>
+              <p className="text-sm md:text-base text-gray-600 mt-1">Manage all registered users</p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Total Users</p>
-              <p className="text-3xl font-bold text-blue-600">{users.length}</p>
+            <div className="text-left sm:text-right">
+              <p className="text-xs md:text-sm text-gray-600">Total Users</p>
+              <p className="text-2xl md:text-3xl font-bold text-blue-600">{users.length}</p>
             </div>
           </div>
           
           {/* Navigation Buttons */}
-          <div className="flex gap-3 pt-6 border-t border-gray-200">
+          <div className="grid grid-cols-2 lg:flex gap-2 md:gap-3 pt-4 md:pt-6 border-t border-gray-200">
             <button
               onClick={() => navigate('/admin')}
-              className="flex-1 px-4 py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2 font-medium"
+              className="flex-1 px-2 sm:px-4 py-2 sm:py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
               </svg>
-              Dashboard
+              <span className="hidden sm:inline">Dashboard</span>
+              <span className="sm:hidden">Home</span>
             </button>
             <button
               onClick={() => navigate('/admin/users')}
-              className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 font-medium"
+              className="flex-1 px-2 sm:px-4 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
               Users
             </button>
             <button
               onClick={() => navigate('/admin/vendors')}
-              className="flex-1 px-4 py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2 font-medium"
+              className="flex-1 px-2 sm:px-4 py-2 sm:py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
               Vendors
             </button>
             <button
               onClick={() => navigate('/admin/contacts')}
-              className="flex-1 px-4 py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2 font-medium"
+              className="flex-1 px-2 sm:px-4 py-2 sm:py-3 bg-white text-gray-700 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-1 sm:gap-2 font-medium text-xs sm:text-sm col-span-2 lg:col-span-1"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              Contact Us
+              Contact
             </button>
           </div>
         </div>
@@ -206,7 +207,7 @@ export default function AdminUsers() {
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-sm font-medium text-gray-600 mb-2">Users with Aadhar</h3>
             <p className="text-3xl font-bold text-green-600">
@@ -230,8 +231,8 @@ export default function AdminUsers() {
 
       {/* User Details Modal */}
       {selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800">User Details</h2>
               <button

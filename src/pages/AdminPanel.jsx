@@ -18,18 +18,18 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg shadow-lg p-8 mb-6 text-white">
-          <div className="flex justify-between items-center">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-4 md:mb-6 text-white">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-              <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-              <p className="mt-2 text-blue-100">Welcome back! Here's your overview</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Admin Dashboard</h1>
+              <p className="mt-1 sm:mt-2 text-sm sm:text-base text-blue-100">Welcome back! Here's your overview</p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-blue-100">Today's Date</p>
-              <p className="text-xl font-semibold">
+            <div className="text-left sm:text-right">
+              <p className="text-xs sm:text-sm text-blue-100">Today's Date</p>
+              <p className="text-base sm:text-lg md:text-xl font-semibold">
                 {new Date().toLocaleDateString('en-IN', {
                   day: 'numeric',
                   month: 'long',
@@ -41,7 +41,7 @@ export default function AdminPanel() {
         </div>
 
         {/* Quick Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-4 md:mb-6">
           <div 
             onClick={() => navigate('/admin/users')}
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition cursor-pointer"
@@ -113,9 +113,9 @@ export default function AdminPanel() {
         </div>
 
         {/* Navigation Cards */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Navigation</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg shadow-md p-4 md:p-6 mb-4 md:mb-6">
+          <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-4">Quick Navigation</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             <button
               onClick={() => navigate('/admin')}
               className="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg hover:bg-blue-100 transition text-left"
@@ -179,9 +179,9 @@ export default function AdminPanel() {
         </div>
 
         {/* Recent Activity */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Recent Activity</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-bold text-gray-800 mb-3 md:mb-4">Recent Activity</h3>
             <div className="space-y-4">
               <div className="flex items-start gap-3 pb-3 border-b border-gray-200">
                 <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
@@ -214,8 +214,8 @@ export default function AdminPanel() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">System Overview</h3>
+          <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-bold text-gray-800 mb-3 md:mb-4">System Overview</h3>
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-1">
